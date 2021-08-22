@@ -383,7 +383,7 @@
         "type": "function",
         "z": "637df463.edde3c",
         "name": "",
-        "func": "msg.payload = msg.payload + 3;\nreturn msg;",
+        "func": "msg.payload = msg.payload + 5;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
