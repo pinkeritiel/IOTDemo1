@@ -1,0 +1,12 @@
+{
+    "name": "IOTDemo1",
+    "description": "IoT Demo Project 1",
+    "version": "0.0.1",
+    "dependencies": {},
+    "node-red": {
+        "settings": {
+            "flowFile": "flows_FRANKENSTEIN.json",
+            "credentialsFile": "flows_FRANKENSTEIN_cred.json"
+        }
+    }
+}
