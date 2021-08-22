@@ -1,1 +1,417 @@
-[{"id":"a4a8c698.9890c8","type":"tab","label":"Flow 1","disabled":false,"info":""},{"id":"4fbc02c1.58290c","type":"tab","label":"Flow 2","disabled":false,"info":""},{"id":"637df463.edde3c","type":"tab","label":"Flow 3","disabled":false,"info":""},{"id":"407a01e4.6b637","type":"mqtt-broker","name":"","broker":"broker.mqttdashboard.com","port":"1883","clientid":"","usetls":false,"protocolVersion":"4","keepalive":"60","cleansession":true,"birthTopic":"","birthQos":"0","birthPayload":"","birthMsg":{},"closeTopic":"","closePayload":"","closeMsg":{},"willTopic":"","willQos":"0","willPayload":"","willMsg":{},"sessionExpiry":""},{"id":"55f89ede.fefc7","type":"inject","z":"a4a8c698.9890c8","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":140,"y":80,"wires":[["d5fe8db2.923e1"]]},{"id":"5e929aa3.f8a034","type":"debug","z":"a4a8c698.9890c8","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":390,"y":80,"wires":[]},{"id":"d5fe8db2.923e1","type":"function","z":"a4a8c698.9890c8","name":"","func":"// Create a Date object from the payload\nvar date = new Date(msg.payload);\n// Change the payload to be a formatted Date string\nmsg.payload = date.toString();\n// Return the message so it can be sent on\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":250,"y":180,"wires":[["5e929aa3.f8a034"]]},{"id":"ccbd3b5d.8a8338","type":"inject","z":"a4a8c698.9890c8","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"300","crontab":"","once":false,"onceDelay":0.1,"topic":"","payload":"","payloadType":"date","x":140,"y":340,"wires":[["37bf3ed6.f4ef62"]]},{"id":"37bf3ed6.f4ef62","type":"http request","z":"a4a8c698.9890c8","name":"","method":"GET","ret":"txt","paytoqs":"ignore","url":"https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.csv","tls":"","persist":false,"proxy":"","authType":"","x":340,"y":340,"wires":[["d30c644e.200878"]]},{"id":"d30c644e.200878","type":"csv","z":"a4a8c698.9890c8","name":"","sep":",","hdrin":true,"hdrout":"none","multi":"one","ret":"\\n","temp":"","skip":"0","strings":true,"include_empty_strings":"","include_null_values":"","x":320,"y":420,"wires":[["d61af17b.6af8d","6a4d78bc.952e68"]]},{"id":"d61af17b.6af8d","type":"debug","z":"a4a8c698.9890c8","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":670,"y":420,"wires":[]},{"id":"6a4d78bc.952e68","type":"switch","z":"a4a8c698.9890c8","name":"","property":"payload.mag","propertyType":"msg","rules":[{"t":"gte","v":"7","vt":"num"}],"checkall":"true","repair":false,"outputs":1,"x":320,"y":520,"wires":[["590227f5.de5fa8"]]},{"id":"590227f5.de5fa8","type":"change","z":"a4a8c698.9890c8","name":"","rules":[{"t":"set","p":"payload","pt":"msg","to":"PANIC!","tot":"str"}],"action":"","property":"","from":"","to":"","reg":false,"x":490,"y":520,"wires":[["359551b7.d7511e"]]},{"id":"359551b7.d7511e","type":"debug","z":"a4a8c698.9890c8","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","statusVal":"","statusType":"auto","x":670,"y":520,"wires":[]},{"id":"2c6873d2.992abc","type":"mqtt out","z":"4fbc02c1.58290c","name":"","topic":"sensors-et/livingroom/temp","qos":"0","retain":"","respTopic":"","contentType":"","userProps":"","correl":"","expiry":"","broker":"407a01e4.6b637","x":480,"y":340,"wires":[]},{"id":"d9beed59.94155","type":"inject","z":"4fbc02c1.58290c","name":"","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":"","topic":"","payload":"22","payloadType":"num","x":290,"y":340,"wires":[["2c6873d2.992abc"]]},{"id":"be80048.8f232f8","type":"mqtt in","z":"4fbc02c1.58290c","name":"","topic":"sensors-et/livingroom/temp","qos":"2","datatype":"auto","broker":"407a01e4.6b637","nl":false,"rap":false,"x":310,"y":420,"wires":[["8640b8ff.f82ff8"]]},{"id":"8640b8ff.f82ff8","type":"debug","z":"4fbc02c1.58290c","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":550,"y":460,"wires":[]},{"id":"a1c46cfc.095eb","type":"inject","z":"637df463.edde3c","name":"1","props":[{"p":"payload"},{"p":"topic","vt":"str"}],"repeat":"","crontab":"","once":false,"onceDelay":0.1,"topic":"one","payload":"1","payloadType":"num","x":360,"y":340,"wires":[["39891412.bd3d8c"]]},{"id":"39891412.bd3d8c","type":"function","z":"637df463.edde3c","name":"","func":"msg.payload = msg.payload + 1;\nreturn msg;","outputs":1,"noerr":0,"initialize":"","finalize":"","libs":[],"x":540,"y":340,"wires":[["bbc3f612.7afd88"]]},{"id":"bbc3f612.7afd88","type":"debug","z":"637df463.edde3c","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","statusVal":"","statusType":"auto","x":780,"y":340,"wires":[]}]
+[
+    {
+        "id": "a4a8c698.9890c8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "4fbc02c1.58290c",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "637df463.edde3c",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "407a01e4.6b637",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.mqttdashboard.com",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "55f89ede.fefc7",
+        "type": "inject",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 80,
+        "wires": [
+            [
+                "d5fe8db2.923e1"
+            ]
+        ]
+    },
+    {
+        "id": "5e929aa3.f8a034",
+        "type": "debug",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "d5fe8db2.923e1",
+        "type": "function",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "func": "// Create a Date object from the payload\nvar date = new Date(msg.payload);\n// Change the payload to be a formatted Date string\nmsg.payload = date.toString();\n// Return the message so it can be sent on\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 180,
+        "wires": [
+            [
+                "5e929aa3.f8a034"
+            ]
+        ]
+    },
+    {
+        "id": "ccbd3b5d.8a8338",
+        "type": "inject",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 340,
+        "wires": [
+            [
+                "37bf3ed6.f4ef62"
+            ]
+        ]
+    },
+    {
+        "id": "37bf3ed6.f4ef62",
+        "type": "http request",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.csv",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 340,
+        "y": 340,
+        "wires": [
+            [
+                "d30c644e.200878"
+            ]
+        ]
+    },
+    {
+        "id": "d30c644e.200878",
+        "type": "csv",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 320,
+        "y": 420,
+        "wires": [
+            [
+                "d61af17b.6af8d",
+                "6a4d78bc.952e68"
+            ]
+        ]
+    },
+    {
+        "id": "d61af17b.6af8d",
+        "type": "debug",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "6a4d78bc.952e68",
+        "type": "switch",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "property": "payload.mag",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gte",
+                "v": "7",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 320,
+        "y": 520,
+        "wires": [
+            [
+                "590227f5.de5fa8"
+            ]
+        ]
+    },
+    {
+        "id": "590227f5.de5fa8",
+        "type": "change",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "PANIC!",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 520,
+        "wires": [
+            [
+                "359551b7.d7511e"
+            ]
+        ]
+    },
+    {
+        "id": "359551b7.d7511e",
+        "type": "debug",
+        "z": "a4a8c698.9890c8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "2c6873d2.992abc",
+        "type": "mqtt out",
+        "z": "4fbc02c1.58290c",
+        "name": "",
+        "topic": "sensors-et/livingroom/temp",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "407a01e4.6b637",
+        "x": 480,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "d9beed59.94155",
+        "type": "inject",
+        "z": "4fbc02c1.58290c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "22",
+        "payloadType": "num",
+        "x": 290,
+        "y": 340,
+        "wires": [
+            [
+                "2c6873d2.992abc"
+            ]
+        ]
+    },
+    {
+        "id": "be80048.8f232f8",
+        "type": "mqtt in",
+        "z": "4fbc02c1.58290c",
+        "name": "",
+        "topic": "sensors-et/livingroom/temp",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "407a01e4.6b637",
+        "nl": false,
+        "rap": false,
+        "x": 310,
+        "y": 420,
+        "wires": [
+            [
+                "8640b8ff.f82ff8"
+            ]
+        ]
+    },
+    {
+        "id": "8640b8ff.f82ff8",
+        "type": "debug",
+        "z": "4fbc02c1.58290c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a1c46cfc.095eb",
+        "type": "inject",
+        "z": "637df463.edde3c",
+        "name": "1",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "one",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 360,
+        "y": 340,
+        "wires": [
+            [
+                "39891412.bd3d8c"
+            ]
+        ]
+    },
+    {
+        "id": "39891412.bd3d8c",
+        "type": "function",
+        "z": "637df463.edde3c",
+        "name": "",
+        "func": "msg.payload = msg.payload + 2;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 340,
+        "wires": [
+            [
+                "bbc3f612.7afd88"
+            ]
+        ]
+    },
+    {
+        "id": "bbc3f612.7afd88",
+        "type": "debug",
+        "z": "637df463.edde3c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 340,
+        "wires": []
+    }
+]
